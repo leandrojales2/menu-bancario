@@ -14,30 +14,36 @@ def menu():
 def cadastrar_conta(cpf, agencia, numero_conta, saldo_inicial):
     print("Cadastro de Conta")
     cpf = input("Informe o CPF para Cadastro da conta (somente números): ")
-    for numero_cpf in usuarios_cadastrados: 
-        if numero_cpf["cpf"] == cpf:
+    if not contas_cadastradas:
+        print("O CPF Informado ainda não possui cadastro.")
+        return None, None, None, None
+    
+    else:
+        for numero_cpf in usuarios_cadastrados: 
+            if numero_cpf["cpf"] == cpf:
 
-            if contas_cadastradas is None:
-                numero_conta = "1"
-                print(numero_conta)
-            else:
-                numero_conta = len(contas_cadastradas) + 1
+                if not contas_cadastradas:
+                    numero_conta = "1"
+                    print(numero_conta)
+                else:
+                    numero_conta = len(contas_cadastradas) + 1
+                    
+                agencia = "0001"
 
-            agencia = "0001"
+                if numero_conta in contas_cadastradas:
+                    input("Número de já cadastrada")
+                
+                else:
+                    saldo_inicial = float(input("Digite o saldo inicial da conta: "))
+                    contas_cadastradas.append(({"cpf": cpf, "agencia": agencia, "numero_conta": numero_conta, "saldo_inicial": saldo_inicial}))
+                    print("Conta cadastrada com Sucesso!")
 
-            if numero_conta in contas_cadastradas:
-                input("Número de já cadastrada")
-            
-            else:
-                saldo_inicial = float(input("Digite o saldo inicial da conta: "))
-                contas_cadastradas.append(({"cpf": cpf, "agencia": agencia, "numero_conta": numero_conta, "saldo_inicial": saldo_inicial}))
-                print("Conta cadastrada com Sucesso!")
-
-            return  cpf, agencia, numero_conta, saldo_inicial 
+                return  cpf, agencia, numero_conta, saldo_inicial
         
-        else:
-            print("O CPF Informado ainda não possui cadastro.")
-            return None, None, None, None
+            else:
+                print("O CPF Informado ainda não possui cadastro.")
+                return None, None, None, None
+            
 
 def cadastrar_usuario(cpf, nome, data_nascimento, endereco):
     cpf = input("Digite seu CPF (somente números): ")
@@ -103,6 +109,9 @@ def extrato(saldo, saldo_inicial, depositos_realizados, saques_realizados):
     print(f'Seu saldo atual é de R$  {saldo:.2f}.')
     print("---------------------------------------\n")
 
+contador = 0
+conta = ""
+indice = 0
 saldo = 0
 limite = 500
 deposito = 0
@@ -115,6 +124,9 @@ tipo_operacao = ""
 saldo_inicial = 0
 usuarios_cadastrados = []
 contas_cadastradas = []
+nome = ""
+cpf = ""
+data_nascimento = ""
 endereco = ""
 agencia = 0
 numero_conta = 0
@@ -126,7 +138,7 @@ while True:
     opcao = input(menu())
 
     if opcao == "c":
-       cpf, agencia, numero_conta, saldo_inicial = cadastrar_conta(cpf, agencia, numero_conta, saldo_inicial)
+        cpf, agencia, numero_conta, saldo_inicial = cadastrar_conta(cpf, agencia, numero_conta, saldo_inicial)
     
     elif opcao == "u":
         cpf, nome, data_nascimento, endereco = cadastrar_usuario(cpf, nome, data_nascimento, endereco)
@@ -139,6 +151,12 @@ while True:
 
     elif opcao == "e":
         extrato(saldo, saldo_inicial, depositos_realizados, saques_realizados)
+
+    elif opcao == "q":
+        break
+
+    else:
+        print("Operação inválida, por favor selecione novamente a operação desejada.")
 
     elif opcao == "q":
         break
